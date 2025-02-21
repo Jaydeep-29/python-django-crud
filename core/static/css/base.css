@@ -1,0 +1,47 @@
+/* Dark Theme Background */
+body {
+  background-color: #1e1e2f; /* Deep Indigo */
+  color: #f8f9fa; /* Light Grayish White */
+}
+
+/* Table Custom Header */
+.table-custom {
+  background-color: #2d2d44; /* Dark Purple */
+  color: #f8f9fa;
+}
+
+/* Add Button */
+.btn-custom {
+  background-color: #00b4d8; /* Bright Cyan */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.btn-custom:hover {
+  background-color: #0096c7;
+}
+
+/* Delete Button */
+.btn-danger-custom {
+  background-color: #ff4c4c; /* Vibrant Red */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+}
+
+.btn-danger-custom:hover {
+  background-color: #e63946;
+}
+
+/* Edit Button */
+.btn-info-custom {
+  background-color: #00b4d8; /* Bright Cyan */
+  color: white;
+  padding: 5px 10px;
+}
+
+.btn-info-custom:hover {
+  background-color: #0096c7;
+}
