@@ -1,6 +1,4 @@
-{% extends "./base.html" %} 
-{% block tile %} Home {% endblock tile %} 
-
+{% extends "./base.html" %} {% block title %} Home {% endblock title %} 
 {% block main_content %}
 <section class="container">
   <div class="row justify-content-around text-center text-white mt-5">
@@ -8,13 +6,13 @@
       <h3 class="text-light">CRUD Project in Python Django</h3>
     </div>
   </div>
-  
+
   <div class="row justify-content-around mt-3">
     <div class="col-sm-8">
       <a href="{% url 'add-student' %}" class="btn btn-custom float-end">Add</a>
     </div>
   </div>
-  
+
   <div class="row justify-content-around text-center text-white mt-1">
     <div class="col-sm-8">
       <table class="table table-dark table-hover">
@@ -34,18 +32,27 @@
             <td>{{ stud.name }}</td>
             <td>{{ stud.roll_no }}</td>
             <td>{{ stud.city }}</td>
-            <td class="align-inline"> 
-              <table> 
-                <tr> 
-                  <td> 
+            <td class="align-inline">
+              <table>
+                <tr>
+                  <td>
                     <form action="{% url 'delete-student' %}" method="POST">
                       {% csrf_token %}
                       <input type="hidden" name="id" value="{{ stud.id }}" />
-                      <input type="submit" value="Delete" class="btn btn-danger-custom btn-sm" />
+                      <input
+                        type="submit"
+                        value="Delete"
+                        class="btn btn-danger-custom btn-sm"
+                      />
                     </form>
                   </td>
-                  <td> 
-                    <a href="{% url 'edit-student' stud.id %}" class="btn btn-info-custom btn-sm"> Edit </a>
+                  <td>
+                    <a
+                      href="{% url 'edit-student' stud.id %}"
+                      class="btn btn-info-custom btn-sm"
+                    >
+                      Edit
+                    </a>
                   </td>
                 </tr>
               </table>
