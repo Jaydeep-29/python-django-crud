@@ -11,8 +11,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the Django project files into the container
 COPY . .
 
-# Set environment variable
-ENV ENV=$env
+# Define build-time variable (ARG)
+ARG ENV
+
+# Set environment variable from ARG
+ENV ENV=${ENV}
 
 # Expose port 8000
 EXPOSE 8000
