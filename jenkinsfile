@@ -1,5 +1,9 @@
 pipeline {
-    agent  any 
+    agent  {
+        docker {
+            image 'python:3.11'
+        }
+    } 
     environment {
         DOCKER_IMAGE = "my-web-app:latest"
         }
@@ -12,11 +16,6 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            agent {
-                docker {
-                    image 'python:3.11'
-                }
-            }
             steps {
                 sh '''
                     pip install --upgrade pip
@@ -26,11 +25,7 @@ pipeline {
         }
 
         stage('Run Django Tests') {
-            agent {
-                docker {
-                    image 'python:3.11'
-                }
-            }
+           
             steps {
                 sh 'python manage.py test'
             }
