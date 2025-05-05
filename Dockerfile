@@ -1,24 +1,22 @@
-# Use official Python 3.12 image
-FROM python:3.12
+# Dockerfile
+FROM python:3.10-slim
 
-# Set the working directory inside the container
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Create work directory
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy the Django project files into the container
-COPY . .
+# Copy project files
+COPY . /app/
 
-# Define build-time variable (ARG)
-ARG ENV
-
-# Set environment variable from ARG
-ENV ENV=${ENV}
-
-# Expose port 8000
+# Expose port
 EXPOSE 8000
 
-# Run Django serverr
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run migrations and start server
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]

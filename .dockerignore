@@ -1,0 +1,6 @@
+.env
+/venv
+Dockerfile
+Dockerfile_old
+jenkinsForDocker
+jenkins_old
