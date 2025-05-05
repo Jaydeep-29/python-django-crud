@@ -1,0 +1,36 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: django-container
+          image: "purohitjd/my-web-app:tagname"
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: django-config
+            - secretRef:
+                name: django-secrets
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
