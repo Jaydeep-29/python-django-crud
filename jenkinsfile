@@ -1,9 +1,9 @@
 pipeline {
-   agent {
-    docker {
-        image 'python:3.11'
+    agent {
+        docker {
+            image 'python:3.11'
+        }
     }
-}
 
     environment {
         DOCKER_IMAGE = "my-web-app:latest"
@@ -13,7 +13,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // echo "Cloning repository..."
                 echo "Code already checked out by Jenkins."
             }
         }
@@ -32,7 +31,6 @@ pipeline {
             steps {
                 echo "Running Django unit tests..."
                 sh '''
-                    source venv/bin/activate
                     python manage.py test
                 '''
             }
@@ -41,6 +39,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image..."
+                // Use host Docker engine since you're running Jenkins in Docker
                 sh "docker build -t $DOCKER_IMAGE ."
             }
         }
