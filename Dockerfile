@@ -1,21 +1,24 @@
-# Dockerfile
+# Use a smaller base image
 FROM python:3.10-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Create work directory
+# Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt /app/
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Copy and install dependencies first (for caching)
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
-COPY . /app/
+COPY . .
 
-# Expose port
+# Collect static files AFTER copying full project
+RUN python manage.py collectstatic --noinput
+
+# Expose Django port
 EXPOSE 8000
 
 # Run migrations and start server
