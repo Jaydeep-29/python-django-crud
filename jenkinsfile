@@ -1,14 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-        }
-    }
-
+    agent  any 
     environment {
         DOCKER_IMAGE = "my-web-app:latest"
-        PYTHONUNBUFFERED = 1
-    }
+        }
 
     stages {
         stage('Checkout') {
@@ -45,15 +39,12 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            echo "Pipeline execution complete."
-        }
+     post {
         success {
-            echo "Build and tests succeeded!"
+            echo "✅ Build and tests succeeded!"
         }
         failure {
-            echo "Something went wrong. Check the logs."
+            echo "❌ Something went wrong. Check the logs."
         }
     }
 }
