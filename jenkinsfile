@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo "Cloning repository..."
-                git 'https://github.com/Jaydeep-29/python-django-crud.git'
+                // echo "Cloning repository..."
+                echo "Code already checked out by Jenkins."
             }
         }
 
