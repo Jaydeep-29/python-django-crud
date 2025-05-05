@@ -10,7 +10,7 @@ pipeline {
         stage('Install and Test') {
             agent {
                 docker {
-                    image 'python:3.11'
+                    image 'python:3.11-slim'
                 }
             }
             steps {
