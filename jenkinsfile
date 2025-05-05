@@ -5,6 +5,8 @@ pipeline {
         DOCKER_IMAGE = "my-web-app:latest"
         CONTAINER_NAME = "my-running-app"
         DJANGO_SECRET_KEY = credentials('DJANGO_SECRET_KEY')
+        DJANGO_DEBUG = 'False'
+        DB_PASSWORD = credentials('DB_PASSWORD')
     }
 
     stages {
@@ -23,27 +25,41 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            agent any
             steps {
                 sh "docker build -t $DOCKER_IMAGE ."
             }
         }
 
-        stage('Run Application') {
-    steps {
-        sh '''
-            docker stop $CONTAINER_NAME || true
-            docker rm $CONTAINER_NAME || true
-            docker run -d --name $CONTAINER_NAME \
-              -p 8000:8000 \
-              -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
-              -e DJANGO_DEBUG=$DJANGO_DEBUG \
-              -e DB_PASSWORD=$DB_PASSWORD \
-              $DOCKER_IMAGE
-        '''
-    }
-}
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_TOKEN'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker tag $DOCKER_IMAGE $DOCKER_USER/$DOCKER_IMAGE
+                        docker push $DOCKER_USER/$DOCKER_IMAGE
+                    '''
+                }
+            }
+        }
 
+        stage('Run Application') {
+            steps {
+                sh '''
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                    docker run -d --name $CONTAINER_NAME \
+                      -p 8000:8000 \
+                      -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
+                      -e DJANGO_DEBUG=$DJANGO_DEBUG \
+                      -e DB_PASSWORD=$DB_PASSWORD \
+                      $DOCKER_IMAGE
+                '''
+            }
+        }
     }
 
     post {
