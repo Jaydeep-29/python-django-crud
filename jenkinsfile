@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "my-web-app:latest"
         CONTAINER_NAME = "my-running-app"
+        DJANGO_SECRET_KEY = credentials('DJANGO_SECRET_KEY')
     }
 
     stages {
@@ -29,15 +30,20 @@ pipeline {
         }
 
         stage('Run Application') {
-            agent any
-            steps {
-                sh '''
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
-                    docker run -d --name $CONTAINER_NAME -p 8000:8000 $DOCKER_IMAGE
-                '''
-            }
-        }
+    steps {
+        sh '''
+            docker stop $CONTAINER_NAME || true
+            docker rm $CONTAINER_NAME || true
+            docker run -d --name $CONTAINER_NAME \
+              -p 8000:8000 \
+              -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
+              -e DJANGO_DEBUG=$DJANGO_DEBUG \
+              -e DB_PASSWORD=$DB_PASSWORD \
+              $DOCKER_IMAGE
+        '''
+    }
+}
+
     }
 
     post {
