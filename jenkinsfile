@@ -46,17 +46,39 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
+        // stage('Run Application') {
+        //     steps {
+        //         sh '''
+        //             docker stop $CONTAINER_NAME || true
+        //             docker rm $CONTAINER_NAME || true
+        //             docker run -d --name $CONTAINER_NAME \
+        //               -p 8000:8000 \
+        //               -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
+        //               -e DJANGO_DEBUG=$DJANGO_DEBUG \
+        //               $DOCKER_IMAGE
+        //         '''
+        //     }
+        // }
+        stage('Deploy to Stage'){
+            steps{
+                sh "kubectl apply -f k8s/deployment.yaml"
+            }
+        }
+
+        // stage ("Selenium UI Tests"){
+        //     steps{
+        //         sh 'pytest selenium_tests/'
+        //     }
+        // }
+
+        stage ('Approval'){
             steps {
-                sh '''
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
-                    docker run -d --name $CONTAINER_NAME \
-                      -p 8000:8000 \
-                      -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
-                      -e DJANGO_DEBUG=$DJANGO_DEBUG \
-                      $DOCKER_IMAGE
-                '''
+                input 'Approve deployment to production?'
+            }
+        }
+        stage('Production') {
+            steps {
+                sh 'kubectl apply -f k8s/Prod-Deployment.yaml'
             }
         }
     }
@@ -67,6 +89,9 @@ pipeline {
         }
         failure {
             echo "❌ Something went wrong. Check logs for details."
+        }
+        always {
+            junit 'reports/*.xml'
         }
     }
 }
