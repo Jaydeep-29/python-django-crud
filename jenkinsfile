@@ -63,7 +63,9 @@ pipeline {
            
 
             steps {
+                withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG')]) {
                 sh "kubectl apply -f k8s/base/deployment.yaml"
+                }
             }
         }
 
@@ -80,7 +82,9 @@ pipeline {
         }
         stage('Production') {
             steps {
+                withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG')]) {
                 sh 'kubectl apply -f k8s/base/Prod-Deployment.yaml'
+                }
             }
         }
     }
