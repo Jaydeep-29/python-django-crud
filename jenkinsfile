@@ -60,7 +60,11 @@ pipeline {
         //     }
         // }
         stage('Deploy to Stage'){
-            steps{
+            agent {
+                   docker { image 'bitnami/kubectl:latest' }
+            }
+
+            steps {
                 sh "kubectl apply -f k8s/deployment.yaml"
             }
         }
