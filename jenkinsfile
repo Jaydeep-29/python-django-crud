@@ -48,28 +48,28 @@ pipeline {
             }
         }
 
-        // stage('Run Application') {
-        //     steps {
-        //         sh '''
-        //             docker stop $CONTAINER_NAME || true
-        //             docker rm $CONTAINER_NAME || true
-        //             docker run -d --name $CONTAINER_NAME \
-        //               -p 8000:8000 \
-        //               -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
-        //               -e DJANGO_DEBUG=$DJANGO_DEBUG \
-        //               $DOCKER_IMAGE
-        //         '''
-        //     }
-        // }
-        stage('Deploy to Stage'){
-           
-
+        stage('Run Application') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG')]) {
-                sh "kubectl apply -f k8s/base/deployment.yaml"
-                }
+                sh '''
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                    docker run -d --name $CONTAINER_NAME \
+                      -p 8000:8000 \
+                      -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
+                      -e DJANGO_DEBUG=$DJANGO_DEBUG \
+                      $DOCKER_IMAGE
+                '''
             }
         }
+        // stage('Deploy to Stage'){
+           
+
+        //     steps {
+        //         withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG')]) {
+        //         sh "kubectl apply -f k8s/base/deployment.yaml"
+        //         }
+        //     }
+        // }
 
         // stage ("Selenium UI Tests"){
         //     steps{
@@ -77,18 +77,18 @@ pipeline {
         //     }
         // }
 
-        stage ('Approval'){
-            steps {
-                input 'Approve deployment to production?'
-            }
-        }
-        stage('Production') {
-            steps {
-                withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG')]) {
-                sh 'kubectl apply -f k8s/base/Prod-Deployment.yaml'
-                }
-            }
-        }
+        // stage ('Approval'){
+        //     steps {
+        //         input 'Approve deployment to production?'
+        //     }
+        // }
+        // stage('Production') {
+        //     steps {
+        //         withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG')]) {
+        //         sh 'kubectl apply -f k8s/base/Prod-Deployment.yaml'
+        //         }
+        //     }
+        // }
     }
 
     post {
