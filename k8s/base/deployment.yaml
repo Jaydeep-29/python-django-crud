@@ -53,16 +53,16 @@ spec:
         - name: django-crud
           image: purohitjd/crud-django-jenkins:latest
           ports:
-            - containerPort: 7000
+            - containerPort: 8000
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: django-crud-staging
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 80
-      targetPort: 7000
+      targetPort: 8000
   selector:
     app: django-crud
