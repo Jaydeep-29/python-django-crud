@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "my-web-app:latest"
+        DOCKER_IMAGE = "crud-django-jenkins:latest"
         CONTAINER_NAME = "my-running-app"
         DJANGO_SECRET_KEY = credentials('DJANGO_SECRET_KEY')
         DJANGO_DEBUG = 'False'
