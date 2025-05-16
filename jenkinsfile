@@ -20,6 +20,8 @@ pipeline {
                 sh '''
                     pip install -r requirements.txt
                     python manage.py test
+                    mkdir -p reports
+                    pytest --junitxml=reports/results.xml
                 '''
             }
         }
@@ -95,9 +97,6 @@ pipeline {
         }
         failure {
             echo "❌ Something went wrong. Check logs for details."
-        }
-        always {
-            junit 'reports/*.xml'
         }
     }
 }

@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
         - name: django-crud
-          image: crud-django-jenkins:latest
+          image: purohitjd/crud-django-jenkins:latest
           ports:
             - containerPort: 7000
 ---
