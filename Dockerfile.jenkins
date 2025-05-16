@@ -4,7 +4,7 @@ USER root
 
 # Install Docker CLI (for building/pushing images)
 RUN apt-get update && \
-    apt-get install -y docker.io curl apt-transport-https ca-certificates && \
+    apt-get install -y docker.io curl apt-transport-https ca-certificates git && \
     rm -rf /var/lib/apt/lists/*
 
 # Install kubectl (latest stable)
