@@ -13,9 +13,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - C:/Users/jaydeep/.kube/config:/var/jenkins_home/.kube/config
       # - /home/ubuntu/.kube/config:/var/jenkins_home/.kube/config
-
-    environment:
-      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/login"]
       interval: 30s

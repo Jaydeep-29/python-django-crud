@@ -22,6 +22,7 @@ pipeline {
                     python manage.py test
                     mkdir -p reports
                     pytest --junitxml=reports/results.xml
+                    pytest selenium_tests/
                 '''
             }
         }
