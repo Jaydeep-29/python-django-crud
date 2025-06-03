@@ -1,0 +1,5 @@
+extraScrapeConfigs:
+  - job_name: 'django-app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['django-crud-prod.default.svc.cluster.local:8000']
