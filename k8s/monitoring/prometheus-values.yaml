@@ -1,4 +1,6 @@
-extraScrapeConfigs:
+# k8s/monitoring/prometheus-values.yaml
+
+extraScrapeConfigs: |
   - job_name: 'django-app'
     metrics_path: /metrics
     static_configs:
